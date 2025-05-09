@@ -1,5 +1,5 @@
-let tarefas = JSON.parse(localStorage.getItem("tarefa")) || [];
 const formulario = document.getElementById("formularioTarefa");
+let tarefas = JSON.parse(localStorage.getItem("tarefa")) || [];
 
 formulario.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -25,7 +25,7 @@ formulario.addEventListener("submit", (e) => {
 });
 
 function salvarTarefas() {
-  localStorage.setItem("tarefas", JSON.stringify(tarefas));
+  localStorage.setItem("tarefa", JSON.stringify(tarefas));
 }
 
 const renderizarTarefas = (lista) => {
@@ -47,3 +47,16 @@ const renderizarTarefas = (lista) => {
     container.appendChild(card);
   });
 };
+
+document.getElementById("filtros").addEventListener("click", (e) => {
+  const tagSelecionada = e.target.dataset.tag;
+  if (!tagSelecionada) return;
+
+  const listaFiltrada =
+    tagSelecionada === "todas"
+      ? tarefas
+      : tarefas.filter(({ tags }) => tags.includes(tagSelecionada));
+  renderizarTarefas(listaFiltrada);
+});
+
+renderizarTarefas(tarefas);
