@@ -48,7 +48,25 @@ const renderizarTarefas = (lista) => {
   });
 };
 
+function atualizarFiltros() {
+  const todasAsTags = [...new Set(tarefas.flatMap(({tags}) => tags))]
+  const container = document.getElementById('filtros');
+  container.innerHTML = `
+    <button class="btn bt-outline-secondary me-2 mb-2">Todas</button>
+  `;
+
+  todasAsTags.forEach(tag => {
+    const botao = document.createElement('button')
+    botao.className = 'btn btn-outline-secondary me-2 mb-2'
+    botao.textContent = tag;
+    botao.dataset.tag = tag;
+    container.appendChild(botao)
+  })
+}
+
 document.getElementById("filtros").addEventListener("click", (e) => {
+  console.log(e.target.dataset.tag);
+  
   const tagSelecionada = e.target.dataset.tag;
   if (!tagSelecionada) return;
 
@@ -56,7 +74,9 @@ document.getElementById("filtros").addEventListener("click", (e) => {
     tagSelecionada === "todas"
       ? tarefas
       : tarefas.filter(({ tags }) => tags.includes(tagSelecionada));
-  renderizarTarefas(listaFiltrada);
+      
+    renderizarTarefas(listaFiltrada);
 });
 
 renderizarTarefas(tarefas);
+atualizarFiltros();
